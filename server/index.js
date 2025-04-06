@@ -1,14 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const fetch = require("node-fetch");
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.GEMINI_API_KEY;
 
-// ✅ Netlify 주소를 명시적으로 허용
+// ✅ 여기가 핵심: Netlify 도메인 허용!
 app.use(cors({
   origin: "https://kimjunsu-ai.netlify.app",
-  methods: ["POST"],
+  methods: ["GET", "POST"],
+  credentials: true
 }));
 
 app.use(express.json());
@@ -39,3 +41,4 @@ app.post("/chat", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`서버 실행 중: http://localhost:${PORT}`);
 });
+
