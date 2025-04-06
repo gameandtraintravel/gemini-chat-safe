@@ -8,7 +8,7 @@ const API_KEY = process.env.GEMINI_API_KEY;
 
 // ✅ 여기가 핵심: Netlify 도메인 허용!
 app.use(cors({
-  origin: "https://kimjunsu-ai.netlify.app",
+  origin: "*",
   methods: ["GET", "POST"],
   credentials: true
 }));
