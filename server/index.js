@@ -5,36 +5,29 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const API_KEY = process.env.GEMINI_API_KEY;
 
-// ✅ CORS 명확히 설정
-app.use(cors({
-  origin: "https://kimjunsu-ai.netlify.app", // 프론트 주소 정확히
-  methods: ["POST", "GET"],
-  allowedHeaders: ["Content-Type"]
-}));
-
+app.use(cors()); // 모든 Origin 허용
 app.use(express.json());
 
 app.post("/chat", async (req, res) => {
-  const userMessage = req.body.message;
   try {
+    const userMessage = req.body.message;
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent?key=${API_KEY}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: userMessage }] }]
-        })
+          contents: [{ parts: [{ text: userMessage }] }],
+        }),
       }
     );
     const data = await response.json();
     const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "응답 없음";
     res.json({ reply });
-  } catch (error) {
-    console.error("Gemini API 오류:", error);
+  } catch (err) {
+    console.error("에러:", err);
     res.status(500).json({ reply: "오류 발생" });
   }
 });
