@@ -7,12 +7,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.GEMINI_API_KEY;
 
-app.use(cors({
+const corsOptions = {
   origin: "https://kimjunsu-ai.netlify.app",
   methods: ["POST"],
   allowedHeaders: ["Content-Type"]
-}));
+};
 
+// Preflight 처리
+app.options("/chat", cors(corsOptions));
+
+// 본 요청 처리
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.post("/chat", async (req, res) => {
@@ -40,5 +45,5 @@ app.post("/chat", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`서버 실행 중: http://localhost:${PORT}`);
+  console.log(`✅ 서버 실행 중: http://localhost:${PORT}`);
 });
