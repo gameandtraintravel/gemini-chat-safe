@@ -10,7 +10,7 @@ const API_KEY = process.env.GEMINI_API_KEY;
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST"],
-  credentials: true
+  allowedHeaders: ["Content-Type"]
 }));
 
 app.use(express.json());
