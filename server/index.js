@@ -9,15 +9,13 @@ const API_KEY = process.env.GEMINI_API_KEY;
 
 const corsOptions = {
   origin: "https://kimjunsu-ai.netlify.app",
-  methods: ["POST"],
+  methods: ["POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"]
 };
 
-// Preflight 처리
-app.options("/chat", cors(corsOptions));
-
-// 본 요청 처리
 app.use(cors(corsOptions));
+app.options("/chat", cors(corsOptions)); // 중요!
+
 app.use(express.json());
 
 app.post("/chat", async (req, res) => {
