@@ -5,16 +5,13 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const API_KEY = process.env.GEMINI_API_KEY;
 
-const corsOptions = {
-  origin: "https://kimjunsu-ai.netlify.app",
-  methods: ["POST", "OPTIONS"],
+// ✅ CORS 명확히 설정
+app.use(cors({
+  origin: "https://kimjunsu-ai.netlify.app", // 프론트 주소 정확히
+  methods: ["POST", "GET"],
   allowedHeaders: ["Content-Type"]
-};
-
-app.use(cors(corsOptions));
-app.options("/chat", cors(corsOptions)); // 중요!
+}));
 
 app.use(express.json());
 
@@ -22,7 +19,7 @@ app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: {
@@ -43,5 +40,5 @@ app.post("/chat", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ 서버 실행 중: http://localhost:${PORT}`);
+  console.log(`서버 실행 중: http://localhost:${PORT}`);
 });
